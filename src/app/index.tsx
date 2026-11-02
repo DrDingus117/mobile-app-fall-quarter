@@ -1,13 +1,13 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { AnimatedIcon } from '@/components/animated-icon';
 import { HintRow } from '@/components/hint-row';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { WebBadge } from '@/components/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import * as Device from 'expo-device';
+import { router } from 'expo-router';
+import { Button, Platform, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function getDevMenuHint() {
   if (Platform.OS === 'web') {
@@ -55,6 +55,14 @@ export default function HomeScreen() {
           />
         </ThemedView>
 
+        {/* Test buttons for the walk details screens (remove when done) */}
+        <ThemedView style={styles.testButtons}>
+          <Button title="Open walk 101" onPress={() => router.push('/walk/101' as any)} />
+          <Button title="Open walk 999 (invalid)" onPress={() => router.push('/walk/999' as any)} />
+          <Button title="Open with no ID" onPress={() => router.push('/walk' as any)} />
+          <Button title="Bad link" onPress={() => router.push('/foo/1' as any)} />
+        </ThemedView>
+
         {Platform.OS === 'web' && <WebBadge />}
       </SafeAreaView>
     </ThemedView>
@@ -94,5 +102,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.four,
     borderRadius: Spacing.four,
+  },
+  testButtons: {
+    alignSelf: 'stretch',
+    gap: Spacing.two,
   },
 });
