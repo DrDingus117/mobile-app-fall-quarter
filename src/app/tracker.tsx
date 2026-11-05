@@ -7,7 +7,7 @@ import * as Notifications from "expo-notifications";
 import type { ComponentType } from "react";
 import { useEffect, useRef, useState } from "react";
 import { Button, Platform, StyleSheet, Text, View } from "react-native";
-import WalkMap from "./walk-map";
+import WalkMap from "../components/walk-map";
 
 const WalkMapComponent = WalkMap as unknown as ComponentType;
 
