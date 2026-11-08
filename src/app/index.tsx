@@ -6,7 +6,7 @@ import { WebBadge } from '@/components/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import * as Device from 'expo-device';
 import { router } from 'expo-router';
-import { Button, Platform, StyleSheet } from 'react-native';
+import { Button, Platform, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 function getDevMenuHint() {
@@ -32,39 +32,41 @@ export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <ThemedView style={styles.heroSection}>
+            <AnimatedIcon />
+            <ThemedText type="title" style={styles.title}>
+              Welcome to&nbsp;Expo
+            </ThemedText>
+          </ThemedView>
+
+          <ThemedText type="code" style={styles.code}>
+            get started
           </ThemedText>
-        </ThemedView>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+          <ThemedView type="backgroundElement" style={styles.stepContainer}>
+            <HintRow
+              title="Try editing"
+              hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
+            />
+            <HintRow title="Dev tools" hint={getDevMenuHint()} />
+            <HintRow
+              title="Fresh start"
+              hint={<ThemedText type="code">npm run reset-project</ThemedText>}
+            />
+          </ThemedView>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+          {/* Test buttons for the walk screens (remove when done) */}
+          <ThemedView style={styles.testButtons}>
+            <Button title="Open Walk Map" onPress={() => router.push('/walkmap' as any)} />
+            <Button title="Open walk 101" onPress={() => router.push('/walk/101' as any)} />
+            <Button title="Open walk 999 (invalid)" onPress={() => router.push('/walk/999' as any)} />
+            <Button title="Open with no ID" onPress={() => router.push('/walk' as any)} />
+            <Button title="Bad link" onPress={() => router.push('/foo/1' as any)} />
+          </ThemedView>
 
-        {/* Test buttons for the walk screens (remove when done) */}
-        <ThemedView style={styles.testButtons}>
-          <Button title="Open Walk Map" onPress={() => router.push('/walkmap' as any)} />
-          <Button title="Open walk 101" onPress={() => router.push('/walk/101' as any)} />
-          <Button title="Open walk 999 (invalid)" onPress={() => router.push('/walk/999' as any)} />
-          <Button title="Open with no ID" onPress={() => router.push('/walk' as any)} />
-          <Button title="Bad link" onPress={() => router.push('/foo/1' as any)} />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
+          {Platform.OS === 'web' && <WebBadge />}
+        </ScrollView>
       </SafeAreaView>
     </ThemedView>
   );
@@ -76,18 +78,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
   },
+  // The outer frame keeps the centered max width
   safeArea: {
     flex: 1,
+    maxWidth: MaxContentWidth,
+  },
+  // The scrolling content gets the spacing and centering
+  scrollContent: {
     paddingHorizontal: Spacing.four,
     alignItems: 'center',
     gap: Spacing.three,
     paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
   },
   heroSection: {
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
+    minHeight: 160,
     paddingHorizontal: Spacing.four,
     gap: Spacing.four,
   },
