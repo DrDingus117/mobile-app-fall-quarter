@@ -55,8 +55,9 @@ export default function HomeScreen() {
           />
         </ThemedView>
 
-        {/* Test buttons for the walk details screens (remove when done) */}
+        {/* Test buttons for the walk screens (remove when done) */}
         <ThemedView style={styles.testButtons}>
+          <Button title="Open Walk Map" onPress={() => router.push('/walkmap' as any)} />
           <Button title="Open walk 101" onPress={() => router.push('/walk/101' as any)} />
           <Button title="Open walk 999 (invalid)" onPress={() => router.push('/walk/999' as any)} />
           <Button title="Open with no ID" onPress={() => router.push('/walk' as any)} />
