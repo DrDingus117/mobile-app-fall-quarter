@@ -16,9 +16,8 @@ export default function TabLayout() {
         <Tabs.Screen name="explore" options={{ title: 'Explore' }} />
         {/* The tracker screen (was walk.tsx) */}
         <Tabs.Screen name="tracker" options={{ title: 'Walk' }} />
-        {/* Walk Details screens: reachable by deep link, hidden from the tab bar */}
-        <Tabs.Screen name="walk/index" options={{ href: null, title: 'Walk Details' }} />
-        <Tabs.Screen name="walk/[id]" options={{ href: null, title: 'Walk Details' }} />
+        {/* The new Walk Map screen */}
+        <Tabs.Screen name="walkmap" options={{ title: 'Walk Map' }} />
       </Tabs>
     </ThemeProvider>
   );
