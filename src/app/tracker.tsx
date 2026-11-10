@@ -4,12 +4,8 @@ import PermissionsButton, {
 import Constants from "expo-constants";
 import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
-import type { ComponentType } from "react";
 import { useEffect, useRef, useState } from "react";
 import { Button, Platform, StyleSheet, Text, View } from "react-native";
-import WalkMap from "../components/walk-map";
-
-const WalkMapComponent = WalkMap as unknown as ComponentType;
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -254,8 +250,6 @@ export default function WalkScreen() {
       {!walkActive && (
         <PermissionsButton title="Start Walk" onStarted={startWalk} />
       )}
-
-      <WalkMapComponent />
 
       <View style={{ flexDirection: "row" }}>
         {walkActive && !paused && <Button title="Pause" onPress={pauseWalk} />}
