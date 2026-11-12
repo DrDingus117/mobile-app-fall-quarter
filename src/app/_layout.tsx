@@ -18,7 +18,9 @@ export default function TabLayout() {
         <Tabs.Screen name="tracker" options={{ title: 'Walk' }} />
         {/* The new Walk Map screen */}
         <Tabs.Screen name="walk-map" options={{ title: 'Walk Map' }} />
+        <Tabs.Screen name="walk-notes" options={{ title: 'Walk Notes' }} />
       </Tabs>
+
     </ThemeProvider>
   );
 }
