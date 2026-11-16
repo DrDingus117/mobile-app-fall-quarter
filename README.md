@@ -415,4 +415,93 @@ Plain text was dark on a dark background. I tried the project's `ThemedText` com
 **17. The Walk Map did not work well in Expo Go on Android.**
 On my Android phone in Expo Go, the map loaded, but the status text was unreadable, the destination circle did not match the coordinates in the code, and I did not finish testing the walk, route, and event log features. Expo Go on Android has limitations, and I do not have an iPhone to compare. The code uses `react-native-maps` and `expo-location` and should work in Expo Go on an iPhone, which is how I expect the instructor to run it.
 
-This app is weird on Android because Expo GO has limitations for location, the Dev build might require me to pay. I know you (Milton) has an IPhone, so just let me know how it works for you while I figure out if I can use an Apple EMU
+
+## Offline Walk Notes
+
+Users can write a short note about a walk, save it on the device with AsyncStorage, view it without an internet connection, and sync it later. **The sync is simulated.** No real server is used.
+
+Open it from the **Open Walk Notes** button on the Home screen or from the **Walk Notes** tab. The screen is `src/components/WalkNotesScreen.tsx`, and the route file is `src/app/walk-notes.tsx`.
+
+### Installing the package
+
+AsyncStorage is already listed in `package.json`. If it is ever missing, install it with:
+
+```bash
+npx expo install @react-native-async-storage/async-storage
+```
+
+Then run `npm install` and `npx expo start`. Open the app in Expo Go, a development build, an emulator, or the browser (press `w`).
+
+### Sync statuses
+
+- **Pending Sync** (stored as `"pending"`): the note is saved on the device but has not been synced.
+- **Synced** (stored as `"synced"`): the simulated sync succeeded.
+
+### What it does
+
+- Notes are limited to 200 characters, and a counter shows the length while typing.
+- Extra spaces are trimmed. Blank and spaces-only notes are rejected.
+- Each note has a unique ID (`Date.now()`), the text, the creation date and time, and a sync status. New notes start as `pending`.
+- Notes are saved in AsyncStorage under the key `walkingTrackerNotes` and loaded when the screen opens.
+- The newest notes appear first.
+- Total, pending, and synced counts update whenever a note is saved or synced.
+- The **Next Sync Will Succeed** switch controls whether the next simulated sync succeeds or fails.
+- **Sync Now** processes only pending notes, is disabled while a sync is running, and takes about one second.
+- A failed sync never deletes a note or changes its status.
+
+Status messages shown on the Walk Notes screen:
+
+- Note saved on this device.
+- Please enter a note before saving.
+- Your note must be 200 characters or fewer.
+- Unable to save the note. Please try again.
+- Saved notes could not be loaded.
+- 3 saved notes loaded.
+- Syncing pending notes...
+- 2 notes synced successfully.
+- Sync unsuccessful. Your notes are still saved on this device. Please try again.
+- All notes are already synced.
+
+### How to use it
+
+- **Create an offline note:** turn off Wi-Fi and mobile data, type a note, and tap **Save Note**. It appears right away as Pending Sync.
+- **Simulate a failed sync:** turn the **Next Sync Will Succeed** switch off and tap **Sync Now**.
+- **Retry a failed sync:** tap **Sync Now** again.
+- **Simulate a successful sync:** turn the switch on and tap **Sync Now**.
+- **Empty queue:** tap **Sync Now** when every note is synced to see "All notes are already synced."
+
+On the web, use DevTools > Network > **Offline** to simulate no internet, and refresh the page to test that notes persist.
+
+### Walk Notes tests
+
+| Test | Result |
+| --- | --- |
+| A blank note is not saved | Pass |
+| A note containing only spaces is not saved | Pass |
+| A valid note can be created without internet access | Pass |
+| A new note immediately displays Pending Sync | Pass |
+| Multiple notes can be stored locally | Pass |
+| The newest notes appear first | Pass |
+| Notes remain available after the app is closed and reopened | Pass |
+| Saved sync statuses remain correct after reopening | Pass |
+| The note counts display the correct totals | Pass |
+| Sync Now processes only pending notes | Pass |
+| A successful sync changes pending notes to Synced | Pass |
+| The success message shows the correct number of notes | Pass |
+| Synced notes are not processed again | Pass |
+| A failed sync keeps notes in the sync queue | Pass |
+| A failed sync does not delete notes | Pass |
+| A failed sync can be retried | Pass |
+| The app handles an empty sync queue | Pass |
+| The app shows a helpful message if local storage fails | Not tested. The code uses try/catch and shows "Unable to save the note. Please try again." |
+
+### Walk Notes problems and solutions
+
+**18. There was no `App.js` to add the screen to.**
+The project uses Expo Router, so every file in `src/app` is a route. *Solution:* put the screen in `src/components/WalkNotesScreen.tsx` and created `src/app/walk-notes.tsx` to render it. The Home screen button opens `/walk-notes`.
+
+**19. TypeScript errors in the new screen.**
+`useState([])` is inferred as an empty array, so reading `syncStatus` failed. *Solution:* added a `Note` type and typed the state.
+
+**20. Black text on a black background on mobile.**
+React Native's plain `Text` defaults to black, which is unreadable in dark mode. *Solution:* switched to the project's `ThemedText` and `ThemedView`, and set the `TextInput` text and placeholder colors from `useColorScheme()`.

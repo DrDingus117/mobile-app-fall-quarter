@@ -1,9 +1,5 @@
-import { Text, View } from 'react-native';
+import WalkNotesScreen from '@/components/WalkNotesScreen';
 
-export default function WalkNotes() {
-    return (
-        <View>
-            <Text>Walk Notes Page</Text>
-        </View>
-    );
+export default function WalkNotesRoute() {
+  return <WalkNotesScreen />;
 }
